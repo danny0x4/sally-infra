@@ -1,4 +1,3 @@
 .terraform
 modules
 .terraform.lock.hcl
-.gitignore
