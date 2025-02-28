@@ -1,13 +1,14 @@
 variable "project_id" {
     description = "Project ID from GCP"
     type = string
+    default = "data-shard-444014-p9"
   
 }
 
 variable "region" {
     description = "Region for GCP resources"
     type = string
-    default = "asia-southeast1-a"
+    default = "asia-southeast1"
 }
 
 variable "zone" {
@@ -27,7 +28,7 @@ variable "cluster_name" {
 variable "node_count" {
     description = "Number of nodes in the cluster"
     type = number
-    default = 3
+    default = 3 # High Availability for prod
   
 }
 

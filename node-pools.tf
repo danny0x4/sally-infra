@@ -9,16 +9,22 @@ resource "google_container_node_pool" "primary_nodes" {
     auto_upgrade = true
 
   }
+  autoscaling {
+  min_node_count = 3 # for High Availability
+  max_node_count = 6  # Depends your money
+}
   
 
   node_config {
     preemptible = false
     machine_type = "e2-medium"
     disk_size_gb = 20
+    disk_type = "pd-standard"
 
     labels = {
       role = "general"
     }
+
 
     service_account = google_service_account.kubernetes.email
 
@@ -33,7 +39,7 @@ resource "google_container_node_pool" "primary_nodes" {
 }
 
 resource "google_service_account" "kubernetes" {
-    account_id = "kubernetes"
+    account_id = "devops"
   
 }
 
@@ -53,16 +59,19 @@ resource "google_container_node_pool" "spot" {
   node_config {
     preemptible = true
     machine_type = "e2-small"
+    disk_size_gb = 20
 
     labels = {
         team = "devops"
     }
 
-    taint = {
+    taint = [
+      {
         key = "instance_type"
         value = "spot"
         effect = "NO_SCHEDULE"
-    }
+      }
+    ]
     service_account = google_service_account.kubernetes.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
