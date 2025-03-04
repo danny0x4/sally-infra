@@ -1,0 +1,18 @@
+# Kontrol buat kasih akses ke publik
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-from-all
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway
+  action: ALLOW # IP whitelist: Control the open domain name access permissions on public networks
+  rules:
+  - to:
+    - operation:
+        hosts:
+        - "p.jalanteknologi.id"
+        - "g.jalanteknologi.id"
+        - "k.jalanteknologi.id"
