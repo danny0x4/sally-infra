@@ -1,0 +1,20 @@
+# ga dipake juga
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  name: x-forwarder-config  # Nama resource (wajib)
+  namespace: istio-system   # Namespace (wajib)
+spec:
+  profile: default  # Profil instalasi (opsional)
+  components:
+    ingressGateways:
+    - name: istio-ingressgateway
+      namespace: istio-system
+      enabled: true
+      k8s:
+        overlays:
+        - kind: Deployment
+          name: istio-ingressgateway
+          patches:
+          - path: spec.template.spec.containers.[name:istio-proxy].env.[name:USE_REMOTE_ADDRESS]
+            value: "false"

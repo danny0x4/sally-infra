@@ -1,0 +1,8 @@
+# kalo pake cloudflare mungkin perlu ini, tp gatau yak ngarang gw soalnya
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  meshConfig:
+    defaultConfig:
+      gatewayTopology:
+        numTrustedProxies: 1  # karna cloudflare adalah 1 proxy di depan Istio

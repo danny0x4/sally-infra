@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-prometheus
+  namespace: istio-system
+spec:
+  gateways:
+  - istio-system/istio-ingressgateway
+  hosts:
+  - "p.jalanteknologi.id"
+  http:
+  - route:
+    - destination:
+        host: prometheus-server.monitoring.svc.cluster.local
+        port:
+          number: 80

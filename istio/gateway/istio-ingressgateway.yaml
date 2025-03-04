@@ -1,0 +1,42 @@
+#pake yang ini
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-ingressgateway
+  namespace: istio-system
+spec:
+  selector:
+    app: istio-ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http-prometheus
+      protocol: HTTP
+    hosts:
+    - "p.jalanteknologi.id"
+    # tls:
+    #  httpsRedirect: true
+  # - port:
+  #     number: 443
+  #     name: https
+  #     protocol: HTTPS
+  #   hosts:
+  #   - "prometheustest.jalanteknologi.id"
+  #   tls:
+  #     mode: SIMPLE
+  #     credentialName: prometheus-tls-secret  # Sesuaikan dengan nama secret yang dibuat
+
+# grafana
+  - port:
+      number: 80
+      name: http-grafana
+      protocol: HTTP
+    hosts:
+    - "g.jalanteknologi.id"
+
+  - port:
+      number: 80
+      name: http-kaili
+      protocol: HTTP
+    hosts:
+    - "k.jalanteknologi.id"

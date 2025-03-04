@@ -39,7 +39,7 @@ resource "google_container_node_pool" "primary_nodes" {
 }
 
 resource "google_service_account" "kubernetes" {
-    account_id = "devops"
+    account_id = "devopskuy"
   
 }
 

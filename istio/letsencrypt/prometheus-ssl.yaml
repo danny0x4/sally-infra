@@ -1,0 +1,14 @@
+# install cluster issuer dulu baru apply script ini. cek di installer.sh
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prometheus-cert
+  namespace: istio-system
+spec:
+  secretName: prometheus-tls-secret  # Nama secret yang akan menyimpan sertifikat
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: prometheustest.jalanteknologi.id
+  dnsNames:
+  - prometheustest.jalanteknologi.id
