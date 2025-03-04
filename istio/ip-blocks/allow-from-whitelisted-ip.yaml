@@ -1,0 +1,19 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-from-whitelist
+  namespace: istio-system
+spec:
+  selector:
+    matchLabels:
+      istio: ingressgateway  # Label yang sesuai
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        remoteIpBlocks:
+        - "103.113.135.98"  # IP yang di-whitelist
+    to:
+    - operation:
+        hosts:
+        - "p.jalanteknologi.id"  # host yang mau lu whitelist

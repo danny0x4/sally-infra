@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-grafana
+  namespace: istio-system
+spec:
+  gateways:
+  - istio-system/istio-ingressgateway
+  hosts:
+  - "g.jalanteknologi.id"
+  http:
+  - route:
+    - destination:
+        host: grafana.monitoring.svc.cluster.local
+        port:
+          number: 3000
