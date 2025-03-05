@@ -1,3 +1,4 @@
+# kalo mau pake whitelist IP, apply ini juga ya.
 apiVersion: networking.istio.io/v1alpha3
 kind: EnvoyFilter
 metadata:
@@ -18,4 +19,5 @@ spec:
         typed_config:
           "@type": "type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager"
           use_remote_address: true
-          xff_num_trusted_hops: 2
+          xff_num_trusted_hops: 1 # ini perlu diperhatikan ya. Use case aku disini adalah aku menggunakan IP External LB dari istio lalu aku bind ke Cloudflare DNS untuk mendapatkan full SSL.
+                                  # Jadi aku perlu mengatur xff_num_trusted_hops (1) karena melalui 1 Proxy (cloudflare)

@@ -1,3 +1,4 @@
+# kalo udah patch deployment istio-ingressgateway dan apply envoyfilter, baru apply ini
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -6,13 +7,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      istio: ingressgateway  # Label yang sesuai
+      app: istio-ingressgateway  # Label yang sesuai
   action: ALLOW
   rules:
   - from:
     - source:
         remoteIpBlocks:
-        - "103.113.135.98"  # IP yang di-whitelist
+        - "15.235.163.196"  # IP yang di-whitelist
+
     to:
     - operation:
         hosts:

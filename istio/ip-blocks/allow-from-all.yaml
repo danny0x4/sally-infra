@@ -13,6 +13,6 @@ spec:
   - to:
     - operation:
         hosts:
-        - "p.jalanteknologi.id"
+        # - "p.jalanteknologi.id"
         - "g.jalanteknologi.id"
         - "k.jalanteknologi.id"
