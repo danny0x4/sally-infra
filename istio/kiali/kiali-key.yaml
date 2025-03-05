@@ -1,8 +1,0 @@
-# apiVersion: v1
-# kind: Secret
-# metadata:
-#   namespace: "istio-system"
-#   name: kiali-signing-key
-# type: Opaque
-# data:
-#   key: "MGI3YmMyZDhhNzY1OGQxOWFhMzQ0YjY5NTAxZTI2NGY="

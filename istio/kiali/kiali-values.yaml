@@ -10,7 +10,7 @@ data:
       openid: {}
       openshift:
         client_id_prefix: kiali
-      strategy: anonymous
+      strategy: token
     deployment:
       accessible_namespaces:
       - '**'
@@ -98,7 +98,8 @@ data:
         ignore:
         - KIA1201
     login_token:
-      signing_key: ""
+      signing_key: "df716d7148b98cad128ff7b67a4a4150" # Change this. but kiali login with JWT token. you can generate kiali token for kiali-service-account. Check generate-kiali-token.sh
+      expiration_seconds: 86400 # 1 day
     server:
       metrics_enabled: true
       metrics_port: 9090
