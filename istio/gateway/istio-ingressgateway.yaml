@@ -14,6 +14,7 @@ spec:
       protocol: HTTP
     hosts:
     - "p.jalanteknologi.id"
+    # kalo lu mau pake letsencrypt buat SSL
     # tls:
     #  httpsRedirect: true
   # - port:
