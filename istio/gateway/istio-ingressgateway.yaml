@@ -41,3 +41,10 @@ spec:
       protocol: HTTP
     hosts:
     - "k.jalanteknologi.id"
+
+  - port:
+      number: 80
+      name: http-vault
+      protocol: HTTP
+    hosts:
+    - "v.jalanteknologi.id"

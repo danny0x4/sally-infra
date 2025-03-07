@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: token-updater-rolebinding-kiali
+  namespace: istio-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: token-updater-role-kiali
+subjects:
+- kind: ServiceAccount
+  name: kiali  # Service Account kiali
+  namespace: istio-system
