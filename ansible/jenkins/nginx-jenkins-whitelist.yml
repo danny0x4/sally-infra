@@ -1,0 +1,105 @@
+---
+- name: Configure Nginx for Jenkins (Whitelist IP)
+  hosts: jenkins
+  become: true
+  vars:
+    domain_name: jenkins.sallystore.my.id
+    jenkins_port: 8080
+    nginx_conf_path: /etc/nginx/sites-available
+    allowed_ips:
+      - "123.456.789.0" # 0
+      - "15.235.163.196" # 1
+
+
+  tasks:
+    - name: Create Nginx config for Jenkins (Whitelist with Cloudflare IP handling)
+      copy:
+        dest: "{{ nginx_conf_path }}/{{ domain_name }}"
+        content: |
+          server {
+            listen 80;
+            listen [::]:80;
+            server_name {{ domain_name }};
+
+            # Logging
+            access_log /var/log/nginx/{{ domain_name }}_access.log;
+            error_log /var/log/nginx/{{ domain_name }}_error.log;
+
+            # Cloudflare Real IP configuration
+            set_real_ip_from 103.21.244.0/22;
+            set_real_ip_from 103.22.200.0/22;
+            set_real_ip_from 103.31.4.0/22;
+            set_real_ip_from 104.16.0.0/13;
+            set_real_ip_from 104.24.0.0/14;
+            set_real_ip_from 108.162.192.0/18;
+            set_real_ip_from 131.0.72.0/22;
+            set_real_ip_from 141.101.64.0/18;
+            set_real_ip_from 162.158.0.0/15;
+            set_real_ip_from 172.64.0.0/13;
+            set_real_ip_from 173.245.48.0/20;
+            set_real_ip_from 188.114.96.0/20;
+            set_real_ip_from 190.93.240.0/20;
+            set_real_ip_from 197.234.240.0/22;
+            set_real_ip_from 198.41.128.0/17;
+            set_real_ip_from 2400:cb00::/32;
+            set_real_ip_from 2606:4700::/32;
+            set_real_ip_from 2803:f800::/32;
+            set_real_ip_from 2405:b500::/32;
+            set_real_ip_from 2405:8100::/32;
+            set_real_ip_from 2a06:98c0::/29;
+            set_real_ip_from 2c0f:f248::/32;
+            real_ip_header CF-Connecting-IP;
+
+            # Whitelist IP asli dari Cloudflare
+            allow {{ allowed_ips[0] }};
+            allow {{ allowed_ips[1] }};
+            deny all;
+
+            location / {
+              proxy_pass http://localhost:{{ jenkins_port }};
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # WebSocket support
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+
+              # Timeout settings
+              proxy_connect_timeout 300;
+              proxy_send_timeout 300;
+              proxy_read_timeout 300;
+              send_timeout 300;
+            }
+          }
+      notify: reload nginx
+
+    - name: Enable Jenkins config
+      file:
+        src: "{{ nginx_conf_path }}/{{ domain_name }}"
+        dest: /etc/nginx/sites-enabled/{{ domain_name }}
+        state: link
+      notify: reload nginx
+
+    - name: Ensure default site is disabled
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: reload nginx
+
+    - name: Test Nginx configuration
+      command: nginx -t
+      register: nginx_test
+      changed_when: false
+
+    - name: Display Nginx test result
+      debug:
+        var: nginx_test.stdout_lines
+
+  handlers:
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded
