@@ -1,0 +1,88 @@
+---
+- name: Install and Configure Nginx for Jenkins (Open Public)
+  hosts: jenkins
+  become: true
+  vars:
+    domain_name: jenkins.sallystore.my.id
+    jenkins_port: 8080
+    nginx_conf_path: /etc/nginx/sites-available
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create Nginx config for Jenkins (Open Public)
+      copy:
+        dest: "{{ nginx_conf_path }}/{{ domain_name }}"
+        content: |
+          server {
+            listen 80;
+            listen [::]:80;
+            server_name {{ domain_name }};
+
+            # Logging
+            access_log /var/log/nginx/{{ domain_name }}_access.log;
+            error_log /var/log/nginx/{{ domain_name }}_error.log;
+
+            location / {
+              proxy_pass http://localhost:{{ jenkins_port }};
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # WebSocket support
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+
+              # Timeout settings
+              proxy_connect_timeout 300;
+              proxy_send_timeout 300;
+              proxy_read_timeout 300;
+              send_timeout 300;
+            }
+          }
+      notify: reload nginx
+
+    - name: Enable Jenkins config
+      file:
+        src: "{{ nginx_conf_path }}/{{ domain_name }}"
+        dest: /etc/nginx/sites-enabled/{{ domain_name }}
+        state: link
+      notify: reload nginx
+
+    - name: Ensure default site is disabled
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: reload nginx
+
+    - name: Test Nginx configuration
+      command: nginx -t
+      register: nginx_test
+      changed_when: false
+
+    - name: Display Nginx test result
+      debug:
+        var: nginx_test.stdout_lines
+
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
+        enabled: yes
+      when: nginx_test is succeeded
+
+  handlers:
+    - name: reload nginx
+      systemd:
+        name: nginx
+        state: reloaded

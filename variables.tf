@@ -32,3 +32,36 @@ variable "node_count" {
   
 }
 
+variable "instance_name" {
+    description = "Name of the instance"
+    type = string
+    default = "jenkins-instance"
+  
+}
+
+variable "machine_type" {
+    description = "Machine type for the instance"
+    type = string
+    default = "e2-medium"
+}
+
+variable "disk_size" {
+    description = "Size of the disk for the instance"
+    type = number
+    default = 30
+  
+}
+
+variable "ssh_user" {
+    description = "Username for SSH"
+    type = string
+    default = "ubuntu"
+  
+}
+
+variable "ssh_pub_key_file" {
+    description = "Path to the public key file"
+    type = string
+    default = "/Users/dannyrestu/id_rsa.pub"
+  
+}
