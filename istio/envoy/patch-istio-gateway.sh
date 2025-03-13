@@ -10,4 +10,4 @@ kubectl patch deployment "${DEPLOYMENT}" -n "${NAMESPACE}" -p '{"spec":{"templat
 # Cek status deployment setelah patching
 kubectl rollout status deployment "${DEPLOYMENT}" -n "${NAMESPACE}"
 
-# jalankan ini dulu sebelum apply envoyfilter.yaml
+# gaperlu apply ini buat whitelist istio

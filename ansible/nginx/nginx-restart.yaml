@@ -1,0 +1,23 @@
+---
+- name: Restart Nginx Service
+  hosts: jenkins
+  become: true
+
+  tasks:
+    - name: Test Nginx configuration before restart
+      command: nginx -t
+      register: nginx_test
+      changed_when: false
+      ignore_errors: true
+
+    - name: Restart Nginx
+      systemd:
+        name: nginx
+        state: restarted
+        enabled: yes
+      when: nginx_test is succeeded
+
+    - name: Show warning if Nginx test failed
+      debug:
+        msg: "WARNING: Nginx configuration test failed. Nginx was NOT restarted."
+      when: nginx_test is failed
