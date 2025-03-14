@@ -18,3 +18,4 @@ spec:
         - "kiali.sallystore.my.id"
         - "vault.sallystore.my.id"
         - "rancher.sallystore.my.id"
+        - "cicd.sallystore.my.id"

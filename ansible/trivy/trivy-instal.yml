@@ -1,0 +1,34 @@
+---
+- name: Install Trivy on VM
+  hosts: tools
+  become: yes
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - wget
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Download and add Aqua Security GPG key
+      shell: |
+        wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+      args:
+        creates: /usr/share/keyrings/trivy.gpg  # Skip kalo file udah ada
+
+    - name: Add Trivy repository to sources list
+      lineinfile:
+        path: /etc/apt/sources.list.d/trivy.list
+        line: 'deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main'
+        create: yes
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Trivy
+      apt:
+        name: trivy
+        state: present
