@@ -55,3 +55,10 @@ spec:
       protocol: HTTP
     hosts:
     - "rancher.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-kubesphere
+      protocol: HTTP
+    hosts:
+    - "cicd.sallystore.my.id"
