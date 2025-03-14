@@ -1,18 +1,17 @@
 ---
-- name: Configure Nginx for Jenkins (Whitelist IP)
+- name: Configure Nginx for SonarQube (Whitelist IP)
   hosts: tools
   become: true
   vars:
-    domain_name: jenkins.sallystore.my.id
-    jenkins_port: 8080
+    domain_name: sonar.sallystore.my.id
+    sonarqube_port: 9000
     nginx_conf_path: /etc/nginx/sites-available
     allowed_ips:
       - "123.456.789.0" # 0
       - "15.235.163.196" # 1
-      
 
   tasks:
-    - name: Create Nginx config for Jenkins (Whitelist with Cloudflare IP handling)
+    - name: Create Nginx config for SonarQube (Whitelist with Cloudflare IP handling)
       copy:
         dest: "{{ nginx_conf_path }}/{{ domain_name }}"
         content: |
@@ -51,12 +50,12 @@
             real_ip_header CF-Connecting-IP;
 
             # Whitelist IP asli dari Cloudflare
-            allow {{ allowed_ips[0] }};
+            # allow {{ allowed_ips[0] }};
             allow {{ allowed_ips[1] }};
             deny all;
 
             location / {
-              proxy_pass http://localhost:{{ jenkins_port }};
+              proxy_pass http://localhost:{{ sonarqube_port }};
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
               proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -76,7 +75,7 @@
           }
       notify: reload nginx
 
-    - name: Enable Jenkins config
+    - name: Enable SonarQube config
       file:
         src: "{{ nginx_conf_path }}/{{ domain_name }}"
         dest: /etc/nginx/sites-enabled/{{ domain_name }}

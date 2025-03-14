@@ -13,7 +13,7 @@ spec:
       name: http-prometheus
       protocol: HTTP
     hosts:
-    - "p.jalanteknologi.id"
+    - "prometheus.sallystore.my.id"
     # kalo lu mau pake letsencrypt buat SSL
     # tls:
     #  httpsRedirect: true
@@ -33,18 +33,25 @@ spec:
       name: http-grafana
       protocol: HTTP
     hosts:
-    - "g.jalanteknologi.id"
+    - "grafana.sallystore.my.id"
 
   - port:
       number: 80
       name: http-kaili
       protocol: HTTP
     hosts:
-    - "k.jalanteknologi.id"
+    - "kiali.sallystore.my.id"
 
   - port:
       number: 80
       name: http-vault
       protocol: HTTP
     hosts:
-    - "v.jalanteknologi.id"
+    - "vault.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-rancher
+      protocol: HTTP
+    hosts:
+    - "rancher.sallystore.my.id"

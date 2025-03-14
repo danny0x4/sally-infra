@@ -13,7 +13,8 @@ spec:
   - to:
     - operation:
         hosts:
-        # - "p.jalanteknologi.id"
-        - "g.jalanteknologi.id"
-        - "k.jalanteknologi.id"
-        - "v.jalanteknologi.id"
+        - "prometheus.sallystore.my.id"
+        - "grafana.sallystore.my.id"
+        - "kiali.sallystore.my.id"
+        - "vault.sallystore.my.id"
+        - "rancher.sallystore.my.id"
