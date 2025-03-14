@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: ks-apiserver-vs
+  namespace: kubesphere-system
+spec:
+  gateways:
+  - istio-system/istio-ingressgateway
+  hosts:
+  - "cicd.sallystore.my.id"
+  http:
+  - match:
+    - uri:
+        prefix: /oauth
+    route:
+    - destination:
+        host: ks-apiserver.kubesphere-system.svc.cluster.local
+        port:
+          number: 80
