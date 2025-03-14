@@ -1,6 +1,6 @@
 ---
 - name: Restart Nginx Service
-  hosts: jenkins
+  hosts: tools
   become: true
 
   tasks:

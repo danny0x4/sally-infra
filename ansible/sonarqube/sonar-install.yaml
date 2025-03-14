@@ -1,0 +1,67 @@
+---
+- name: Install and Configure SonarQube
+  hosts: tools
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: install required packages
+      apt:
+        name:
+          - unzip
+
+    - name: Download SonarQube
+      get_url:
+        url: https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-25.3.0.104237.zip
+        dest: /opt/sonarqube.zip
+
+    - name: Unzip SonarQube
+      unarchive:
+        src: /opt/sonarqube.zip
+        dest: /opt
+        remote_src: yes
+
+    - name: Create SonarQube user
+      user:
+        name: sonarqube
+        comment: "SonarQube Service User"
+        shell: /bin/bash
+        system: yes
+
+    - name: Set permissions for SonarQube directory
+      file:
+        path: /opt/sonarqube-25.3.0.104237
+        owner: sonarqube
+        group: sonarqube
+        recurse: yes
+
+    - name: Create SonarQube service file
+      copy:
+        dest: /etc/systemd/system/sonarqube.service
+        content: |
+          [Unit]
+          Description=SonarQube service
+          After=syslog.target network.target
+
+          [Service]
+          Type=forking
+          ExecStart=/opt/sonarqube-25.3.0.104237/bin/linux-x86-64/sonar.sh start
+          ExecStop=/opt/sonarqube-25.3.0.104237/bin/linux-x86-64/sonar.sh stop
+          User=sonarqube
+          Group=sonarqube
+          Restart=always
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd daemon
+      systemd:
+        daemon_reload: yes
+
+    - name: Enable and start SonarQube service
+      systemd:
+        name: sonarqube
+        enabled: yes
+        state: started
