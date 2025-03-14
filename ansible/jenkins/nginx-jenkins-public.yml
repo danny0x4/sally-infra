@@ -1,6 +1,6 @@
 ---
 - name: Install and Configure Nginx for Jenkins (Open Public)
-  hosts: jenkins
+  hosts: tools
   become: true
   vars:
     domain_name: jenkins.sallystore.my.id

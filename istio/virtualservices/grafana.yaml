@@ -7,7 +7,7 @@ spec:
   gateways:
   - istio-system/istio-ingressgateway
   hosts:
-  - "g.jalanteknologi.id"
+  - "grafana.sallystore.my.id"
   http:
   - route:
     - destination:

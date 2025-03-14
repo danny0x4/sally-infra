@@ -7,7 +7,7 @@ spec:
   gateways:
   - istio-system/istio-ingressgateway
   hosts:
-  - "k.jalanteknologi.id"
+  - "kiali.sallystore.my.id"
   http:
   - route:
     - destination:
