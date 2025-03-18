@@ -62,3 +62,10 @@ spec:
       protocol: HTTP
     hosts:
     - "cicd.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-argocd
+      protocol: HTTP
+    hosts:
+    - "argocd.sallystore.my.id"

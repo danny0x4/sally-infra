@@ -19,3 +19,4 @@ spec:
         - "vault.sallystore.my.id"
         - "rancher.sallystore.my.id"
         - "cicd.sallystore.my.id"
+        - "argocd.sallystore.my.id"
