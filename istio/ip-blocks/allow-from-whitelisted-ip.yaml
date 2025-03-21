@@ -18,4 +18,6 @@ spec:
     to:
     - operation:
         hosts:
-        - "p.jalanteknologi.id"  # host yang mau lu whitelist
+        - "vault.sallystore.my.id"  # host yang mau lu whitelist
+        - "argocd.sallystore.my.id"
+        - "prometheus.sallystore.my.id"
