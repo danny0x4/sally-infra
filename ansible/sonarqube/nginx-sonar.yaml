@@ -7,8 +7,8 @@
     sonarqube_port: 9000
     nginx_conf_path: /etc/nginx/sites-available
     allowed_ips:
-      - "123.456.789.0" # 0
-      - "15.235.163.196" # 1
+      - "35.240.243.46" # 0 IP Instance
+      - "15.235.163.196" # 1 IP VPN
 
   tasks:
     - name: Create Nginx config for SonarQube (Whitelist with Cloudflare IP handling)
@@ -50,7 +50,7 @@
             real_ip_header CF-Connecting-IP;
 
             # Whitelist IP asli dari Cloudflare
-            # allow {{ allowed_ips[0] }};
+            allow {{ allowed_ips[0] }};
             allow {{ allowed_ips[1] }};
             deny all;
 
