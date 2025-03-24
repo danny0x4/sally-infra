@@ -19,8 +19,8 @@ for i in {1..30}; do  # Loop up to 30 times (around 3 minutes)
     echo "Kiali is running! Proceeding with custom configurations."
     break
   fi
-  echo "Kiali is not ready yet. Retrying in 10 seconds..."
-  sleep 10
+  echo "Kiali is not ready yet. Retrying in 30 seconds..."
+  sleep 30
 done
 
 # Apply custom Kiali configurations

@@ -7,9 +7,14 @@
     jenkins_port: 8080
     nginx_conf_path: /etc/nginx/sites-available
     allowed_ips:
-      - "123.456.789.0" # 0
-      - "15.235.163.196" # 1
-      
+      - "35.240.243.46" # 0 IP Instance
+      - "15.235.163.196" # 1 IP VPN
+      - "192.30.252.0/22" # 2 IP Github Webook
+      - "185.199.108.0/22" # 3 IP Github Webook
+      - "140.82.112.0/20" # 4 IP Github Webook
+      - "143.55.64.0/20" # 5 IP Github Webook
+      - "2a0a:a440::/29" # 6 IP Github Webook
+      - "2606:50c0::/32" # 7 IP Github Webook
 
   tasks:
     - name: Create Nginx config for Jenkins (Whitelist with Cloudflare IP handling)
@@ -53,6 +58,12 @@
             # Whitelist IP asli dari Cloudflare
             allow {{ allowed_ips[0] }};
             allow {{ allowed_ips[1] }};
+            allow {{ allowed_ips[2] }};
+            allow {{ allowed_ips[3] }};
+            allow {{ allowed_ips[4] }};
+            allow {{ allowed_ips[5] }};
+            allow {{ allowed_ips[6] }};
+            allow {{ allowed_ips[7] }};
             deny all;
 
             location / {

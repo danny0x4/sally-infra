@@ -14,6 +14,7 @@ spec:
     - source:
         remoteIpBlocks:
         - "15.235.163.196"  # IP yang di-whitelist
+        - "103.113.135.98"
 
     to:
     - operation:
