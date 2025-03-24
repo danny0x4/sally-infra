@@ -1,0 +1,29 @@
+---
+# ini swap memory buat si sonarqube bisa scanning, kecil cok memory cuma 4gb ga cukup.
+- name: Configure Swap Memory
+  hosts: tools
+  become: yes
+  tasks:
+    - name: Allocate swap file
+      command: fallocate -l 4G /swapfile
+      args:
+        creates: /swapfile
+
+    - name: Set permissions on swap file
+      file:
+        path: /swapfile
+        mode: '0600'
+
+    - name: Format swap file
+      command: mkswap /swapfile
+      when: ansible_check_mode == false
+
+    - name: Enable swap file
+      command: swapon /swapfile
+      when: ansible_check_mode == false
+
+    - name: Make swap permanent
+      lineinfile:
+        path: /etc/fstab
+        line: '/swapfile none swap sw 0 0'
+        state: present

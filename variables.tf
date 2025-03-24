@@ -1,7 +1,7 @@
 variable "project_id" {
     description = "Project ID from GCP"
     type = string
-    default = "data-shard-444014-p9"
+    default = "eighth-strata-454614-d5"
   
 }
 
