@@ -20,3 +20,6 @@ helm install vault hashicorp/vault \
    --set="ui.enabled=true" \
    --set="ui.serviceType=ClusterIP" \
    --namespace "${namespace}"
+
+helm install vault-secrets-operator hashicorp/vault-secrets-operator \
+   --namespace "${namespace}"
