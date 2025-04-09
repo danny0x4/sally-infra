@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: staging
+  labels:
+    app: mysql
+  annotations:
+    vault.hashicorp.com/agent-inject: "true"
+    vault.hashicorp.com/role: "staging-role"
+    vault.hashicorp.com/agent-inject-secret-database-config: "kv-v2/data/sallystore/backend-staging"
+    vault.hashicorp.com/agent-inject-template-database-config: |
+      {{- with secret "kv-v2/data/sallystore/backend-staging" -}}
+      export MYSQL_ROOT_PASSWORD={{ .Data.data.root_password }}
+      export MYSQL_DATABASE={{ .Data.data.database_name }}
+      export MYSQL_USER={{ .Data.data.database_user }}
+      export MYSQL_PASSWORD={{ .Data.data.user_password }}
+      {{- end }}
+spec:
+  serviceName: mysql
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "staging-role"
+        vault.hashicorp.com/agent-inject-secret-database-config: "kv-v2/data/sallystore/backend-staging"
+        vault.hashicorp.com/agent-inject-template-database-config: |
+          {{- with secret "kv-v2/data/sallystore/backend-staging" -}}
+          export MYSQL_ROOT_PASSWORD={{ .Data.data.root_password }}
+          export MYSQL_DATABASE={{ .Data.data.database_name }}
+          export MYSQL_USER={{ .Data.data.database_user }}
+          export MYSQL_PASSWORD={{ .Data.data.user_password }}
+          {{- end }}
+    spec:
+      serviceAccountName: vault-auth
+      containers:
+      - name: mysql
+        image: mysql:8.0
+        env:
+        - name: MYSQL_ROOT_PASSWORD_FILE
+          value: /vault/secrets/database-config
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-persistent-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: staging
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql
+  clusterIP: None
