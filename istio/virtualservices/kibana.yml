@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web-kibana
+  namespace: istio-system
+spec:
+  gateways:
+  - istio-system/istio-ingressgateway
+  hosts:
+  - "kibana.sallystore.my.id"
+  http:
+  - route:
+    - destination:
+        host: kibana-kibana.logging.svc.cluster.local
+        port:
+          number: 5601

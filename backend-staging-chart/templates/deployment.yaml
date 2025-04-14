@@ -15,10 +15,21 @@ spec:
     metadata:
       annotations:
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/role: "{{ .Values.vault.role }}"
-        vault.hashicorp.com/agent-inject-secret-config.json: "/app/config.json"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/role: "staging-role"
+        vault.hashicorp.com/agent-inject-secret-config.json: "kv-v2/data/sallystore/backend-staging"
+        vault.hashicorp.com/agent-log-level: "debug"
         vault.hashicorp.com/agent-inject-template-config.json: |
-          {{ .Values.vault.secrets.template | nindent 10 }}
+          {{`{{- with secret "kv-v2/data/sallystore/backend-staging" -}}
+          {
+            "app": {{ .Data.data.app | toJSON }},
+            "dbNlogin": "{{ .Data.data.dbNlogin }}",
+            "midtrans": {{ .Data.data.midtrans | toJSON }},
+            "security": {{ .Data.data.security | toJSON }},
+            "discord": {{ .Data.data.discord | toJSON }},
+            "smtp": {{ .Data.data.smtp | toJSON }}
+          }
+          {{- end -}}`}}
         vault.hashicorp.com/agent-inject-file-config.json: "/app/config.json"
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -54,7 +65,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           env:
             - name: CONFIG_PATH
-              value: "/vault/secrets/config.json"
+              value: "/app/config.json"
           {{- with .Values.volumeMounts }}
           volumeMounts:
             {{- toYaml . | nindent 12 }}
