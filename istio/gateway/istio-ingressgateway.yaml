@@ -90,3 +90,10 @@ spec:
       protocol: HTTP
     hosts:
     - "elastic.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-frontend
+      protocol: HTTP
+    hosts:
+    - "staging.sallystore.my.id"
