@@ -4,3 +4,4 @@ modules
 terraform.tfstate.backup
 terraform.tfstate
 terraform-key.json
+mysql/mysql-secret.yml

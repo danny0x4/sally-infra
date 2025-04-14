@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: elasticsearch-dr
+  namespace: logging
+spec:
+  host: elasticsearch-master.logging.svc.cluster.local
+  exportTo:
+    - "*"
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+      insecureSkipVerify: true

@@ -27,7 +27,7 @@ spec:
   #     mode: SIMPLE
   #     credentialName: prometheus-tls-secret  # Sesuaikan dengan nama secret yang dibuat
 
-# grafana
+
   - port:
       number: 80
       name: http-grafana
@@ -69,3 +69,24 @@ spec:
       protocol: HTTP
     hosts:
     - "argocd.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-payment-service-staging
+      protocol: HTTP
+    hosts:
+    - "staging-paymentservice.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-kibana
+      protocol: HTTP
+    hosts:
+    - "kibana.sallystore.my.id"
+
+  - port:
+      number: 80
+      name: http-elastic
+      protocol: HTTP
+    hosts:
+    - "elastic.sallystore.my.id"

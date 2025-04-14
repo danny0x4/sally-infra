@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: payment-service-staging
+  namespace: istio-system
+spec:
+  gateways:
+  - istio-system/istio-ingressgateway
+  hosts:
+  - "staging-paymentservice.sallystore.my.id"
+  http:
+  - route:
+    - destination:
+        host: payment-service.staging.svc.cluster.local
+        port:
+          number: 9001
