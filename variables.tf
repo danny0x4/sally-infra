@@ -1,7 +1,7 @@
 variable "project_id" {
     description = "Project ID from GCP"
     type = string
-    default = "eighth-strata-454614-d5"
+    default = "mesmerizing-air-457914-p4"
   
 }
 

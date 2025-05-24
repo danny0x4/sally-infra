@@ -1,5 +1,1 @@
-jenkins-instance ansible_host=35.240.132.33
-jenkins-instance ansible_host=34.142.219.41
-jenkins-instance ansible_host=35.240.132.33
-jenkins-instance ansible_host=35.198.254.160
-jenkins-instance ansible_host=35.240.243.46
+jenkins-instance ansible_host=34.142.128.43
