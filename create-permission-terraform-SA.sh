@@ -1,10 +1,18 @@
 #!/bin/bash
+set -e
 
-set -e  # Exit immediately if a command exits with a non-zero status
-
-PROJECT_ID="eighth-strata-454614-d5"
-SERVICE_ACCOUNT="hin-terraform@$PROJECT_ID.iam.gserviceaccount.com"
+PROJECT_ID="mesmerizing-air-457914-p4"
+SERVICE_ACCOUNT="bay-terraform@$PROJECT_ID.iam.gserviceaccount.com"
 KEY_FILE="terraform-key.json"
+
+# Create the service account if it doesn't exist
+if ! gcloud iam service-accounts list --filter="email=$SERVICE_ACCOUNT" --format="value(email)" | grep -q "$SERVICE_ACCOUNT"; then
+    echo "Creating service account: $SERVICE_ACCOUNT"
+    gcloud iam service-accounts create "bay-terraform" \
+        --display-name "Terraform Provisioning Service Account"
+else
+    echo "Service account already exists: $SERVICE_ACCOUNT"
+fi
 
 # Function to add IAM policy binding
 function add_iam_role() {

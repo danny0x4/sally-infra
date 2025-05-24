@@ -64,14 +64,19 @@ resource "google_container_node_pool" "spot" {
     labels = {
         team = "devops"
     }
-
-    taint = [
-      {
+    taint {
         key = "instance_type"
         value = "spot"
         effect = "NO_SCHEDULE"
-      }
-    ]
+    }
+
+    # taint = [
+    #   {
+    #     key = "instance_type"
+    #     value = "spot"
+    #     effect = "NO_SCHEDULE"
+    #   }
+    # ]
     service_account = google_service_account.kubernetes.email
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform",
